@@ -1,0 +1,64 @@
+
+{% extends "base.html" %}
+
+{% block title %}My Account | SmartTravel{% endblock %}
+
+{% block content %}
+<main class="account-page">
+    <section class="account-hero">
+        <p class="eyebrow"><span></span> YOUR TRAVEL SPACE</p>
+        <h1>Welcome back,<br><em>{{ session.get('user_name', 'Traveler') }}.</em></h1>
+        <p>Your next unforgettable journey begins here.</p>
+    </section>
+
+    <section class="account-content">
+        <div class="account-heading">
+            <div>
+                <p class="auth-kicker">ACCOUNT OVERVIEW</p>
+                <h2>Your personal <em>dashboard.</em></h2>
+            </div>
+            <div class="account-avatar">
+                {{ session.get('user_name', 'T')[0]|upper }}
+            </div>
+        </div>
+
+        <div class="account-details">
+            <div class="account-detail">
+                <span>FULL NAME</span>
+                <strong>{{ session.get('user_name', 'Traveler') }}</strong>
+            </div>
+
+            <div class="account-detail">
+                <span>EMAIL ADDRESS</span>
+                <strong>{{ session.get('user_email', '') }}</strong>
+            </div>
+
+            <div class="account-detail">
+                <span>ACCOUNT STATUS</span>
+                <strong class="account-status">● Signed in</strong>
+            </div>
+        </div>
+
+        <div class="account-actions">
+            <div>
+                <p class="auth-kicker">YOUR NEXT ADVENTURE</p>
+                <h3>Somewhere new is calling.</h3>
+                <p>Discover destinations and explore travel options for your next trip.</p>
+            </div>
+            <a href="/destinations" class="explore-button">
+                EXPLORE DESTINATIONS <span>→</span>
+            </a>
+        </div>
+
+        <div class="account-bookings">
+            <span class="account-booking-icon">✈</span>
+            <div>
+                <h3>Your journeys, all in one place.</h3>
+                <p>Your booking history will appear here once travel booking is implemented.</p>
+            </div>
+        </div>
+
+        <a href="/" class="back-home">← Back to homepage</a>
+    </section>
+</main>
+{% endblock %}

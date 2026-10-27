@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#061014">
+
+    <title>{% block title %}SmartTravel — Journeys Beyond Borders{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <header class="navbar">
+        <a href="{{ url_for('home') }}" class="logo">
+            <span>✈</span> SMARTTRAVEL
+        </a>
+
+        <nav class="nav-links">
+            <a href="{{ url_for('destinations') }}">Discover</a>
+            <a href="{{ url_for('home') }}#destinations">Journeys</a>
+            <a href="{{ url_for('home') }}#about">About</a>
+        </nav>
+
+        <div class="nav-actions">
+            {% if session.get('user_id') %}
+                <span class="nav-user">
+                    Hi, {{ session.get('user_name', 'Traveler') }}
+                </span>
+
+                <a class="signin" href="{{ url_for('account') }}">My Account</a>
+
+                <form class="logout-form" action="{{ url_for('logout') }}" method="POST">
+                    <button class="plan-link logout-button" type="submit">
+                        Logout <span>↗</span>
+                    </button>
+                </form>
+            {% else %}
+                <a class="signin" href="{{ url_for('login') }}">Sign in</a>
+
+                <a class="plan-link" href="{{ url_for('register') }}">
+                    Plan a trip <span>↗</span>
+                </a>
+            {% endif %}
+        </div>
+    </header>
+
+    <main>
+        {% if request.endpoint not in ['login', 'register'] %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-container" style="max-width: 1120px; margin: 20px auto 0; padding: 0 4.8%;">
+                        {% for category, message in messages %}
+                            <div class="flash-message {{ category }}" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <a href="{{ url_for('home') }}" class="logo">
+            <span>✈</span> SMARTTRAVEL
+        </a>
+
+        <p>For the places that stay with you.</p>
+        <p>© 2026 SmartTravel Management System</p>
+
+        {% if session.get('user_id') %}
+            <p>
+                <a href="{{ url_for('my_bookings') }}">My Bookings</a>
+                ·
+                <a href="{{ url_for('account') }}">My Account</a>
+            </p>
+        {% endif %}
+    </footer>
+</body>
+</html>

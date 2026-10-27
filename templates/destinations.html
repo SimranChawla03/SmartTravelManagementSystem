@@ -1,0 +1,581 @@
+
+{% extends "base.html" %}
+{% block title %}Choose Your Flight — SmartTravel{% endblock %}
+
+{% block content %}
+<style>
+.flight-results-page {
+    background: #050b0e;
+    color: #f5f4f0;
+    min-height: 100vh;
+    padding: 72px 4.8% 90px;
+}
+
+.flight-topline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.flight-eyebrow {
+    font-size: 10px;
+    letter-spacing: 2.5px;
+    color: #55e7e8;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.flight-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(38px, 5vw, 76px);
+    line-height: 1.08;
+    margin: 12px 0;
+}
+
+.flight-title em {
+    color: #55e7e8;
+}
+
+.flight-subtitle {
+    color: #b7cbd1;
+    margin: 14px 0 0;
+}
+
+.flight-currency {
+    border: 1px solid #254148;
+    border-radius: 7px;
+    padding: 14px 18px;
+    color: #55e7e8;
+    font-size: 11px;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+.flight-search-panel {
+    margin: 42px 0 28px;
+    padding: 22px;
+    background: #0b171b;
+    border: 1px solid #263e44;
+    border-radius: 12px;
+    display: grid;
+    grid-template-columns: 1.3fr 1fr .6fr auto;
+    gap: 16px;
+    align-items: end;
+}
+
+.flight-field label {
+    display: block;
+    color: #9bb9c4;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    margin: 0 0 10px;
+    text-transform: uppercase;
+}
+
+.flight-field input,
+.flight-field select {
+    width: 100%;
+    box-sizing: border-box;
+    background: #101f24;
+    border: 1px solid #2b444a;
+    border-radius: 6px;
+    color: #fff;
+    padding: 15px;
+    font: inherit;
+    min-height: 52px;
+}
+
+.calendar-input-wrap {
+    position: relative;
+    width: 100%;
+}
+
+.calendar-input-wrap input[type="date"] {
+    width: 100%;
+    padding-right: 48px;
+    color-scheme: dark;
+    cursor: pointer;
+}
+
+.calendar-input-wrap input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    width: 45px;
+    height: 100%;
+    cursor: pointer;
+}
+
+.calendar-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #55e7e8;
+    font-size: 23px;
+    pointer-events: none;
+}
+
+.flight-search-button,
+.select-flight-button {
+    border: 0;
+    border-radius: 6px;
+    background: #55e7e8;
+    color: #061014;
+    padding: 16px 22px;
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    min-height: 52px;
+}
+
+.flight-search-button:hover,
+.select-flight-button:hover {
+    background: #8cf5f4;
+}
+
+.results-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 35px 0 18px;
+}
+
+.results-toolbar h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 27px;
+    margin: 0;
+}
+
+.results-toolbar p {
+    color: #91aeb8;
+    font-size: 13px;
+    margin: 7px 0 0;
+}
+
+.demo-label {
+    font-size: 10px;
+    color: #e6c78d;
+    letter-spacing: 1px;
+    border: 1px solid #574a2d;
+    padding: 9px 12px;
+    border-radius: 5px;
+}
+
+.flight-list {
+    display: grid;
+    gap: 16px;
+}
+
+.flight-card {
+    display: grid;
+    grid-template-columns: minmax(190px, 1.1fr) minmax(300px, 2fr) minmax(145px, .75fr);
+    gap: 25px;
+    align-items: center;
+    background: linear-gradient(135deg, #0d1a1e, #091216);
+    border: 1px solid #20383e;
+    border-radius: 12px;
+    padding: 25px;
+    transition: border-color .2s, transform .2s;
+}
+
+.flight-card:hover {
+    border-color: #3cced0;
+    transform: translateY(-2px);
+}
+
+.airline-block {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.airline-mark {
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: #133238;
+    color: #55e7e8;
+    font-weight: 900;
+    font-size: 13px;
+    flex-shrink: 0;
+}
+
+.airline-name {
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.flight-number {
+    color: #8caab4;
+    font-size: 12px;
+    margin-top: 7px;
+}
+
+.fare-pill {
+    display: inline-block;
+    margin-top: 12px;
+    border-radius: 4px;
+    background: #102e33;
+    color: #64eeee;
+    padding: 7px 9px;
+    font-size: 10px;
+    letter-spacing: .6px;
+}
+
+.flight-route {
+    display: grid;
+    grid-template-columns: 1fr minmax(85px, .8fr) 1fr;
+    align-items: center;
+    gap: 12px;
+}
+
+.route-time {
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.route-city {
+    font-size: 12px;
+    color: #a3bac1;
+    margin-top: 6px;
+}
+
+.route-end:last-child {
+    text-align: right;
+}
+
+.route-middle {
+    text-align: center;
+}
+
+.route-duration {
+    font-size: 11px;
+    color: #a6c0c8;
+    white-space: nowrap;
+}
+
+.route-line {
+    height: 1px;
+    background: #42616a;
+    position: relative;
+    margin: 12px 0;
+}
+
+.route-line:before,
+.route-line:after {
+    content: '';
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #55e7e8;
+    top: -2px;
+}
+
+.route-line:before { left: 0; }
+.route-line:after { right: 0; }
+
+.route-stops {
+    font-size: 10px;
+    color: #55e7e8;
+    white-space: nowrap;
+}
+
+.flight-meta {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+    color: #91aeb8;
+    font-size: 11px;
+}
+
+.flight-price-block {
+    border-left: 1px solid #263d43;
+    padding-left: 24px;
+}
+
+.price-caption {
+    font-size: 10px;
+    letter-spacing: 1.2px;
+    color: #8eabb5;
+}
+
+.flight-price {
+    font-size: 30px;
+    color: #55e7e8;
+    font-weight: 800;
+    margin: 8px 0 3px;
+}
+
+.flight-total-caption {
+    font-size: 11px;
+    color: #9ab4bc;
+    margin-bottom: 13px;
+}
+
+.select-flight-button {
+    width: 100%;
+    min-height: 45px;
+    padding: 12px 10px;
+}
+
+.flight-description {
+    font-size: 11px;
+    color: #8da9b2;
+    margin-top: 10px;
+    line-height: 1.5;
+}
+
+.empty-flights {
+    padding: 40px 25px;
+    text-align: center;
+    border: 1px dashed #345158;
+    border-radius: 10px;
+    color: #adc1c7;
+}
+
+.empty-flights h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 27px;
+}
+
+.empty-flights p {
+    color: #91aeb8;
+    line-height: 1.7;
+}
+
+.flight-note {
+    font-size: 11px;
+    color: #76949d;
+    line-height: 1.7;
+    margin-top: 24px;
+}
+
+@media (max-width: 900px) {
+    .flight-search-panel {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .flight-card {
+        grid-template-columns: 1fr 1.5fr;
+    }
+
+    .flight-price-block {
+        grid-column: 1 / -1;
+        border-left: 0;
+        border-top: 1px solid #263d43;
+        padding: 18px 0 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .flight-results-page {
+        padding: 45px 5% 60px;
+    }
+
+    .flight-search-panel,
+    .flight-card {
+        grid-template-columns: 1fr;
+    }
+
+    .flight-card {
+        padding: 19px;
+        gap: 22px;
+    }
+
+    .flight-price-block {
+        grid-column: auto;
+    }
+
+    .flight-route {
+        grid-template-columns: 1fr minmax(65px, .8fr) 1fr;
+    }
+
+    .route-time {
+        font-size: 21px;
+    }
+
+    .flight-currency {
+        display: none;
+    }
+}
+</style>
+
+<section class="flight-results-page">
+    <div class="flight-topline">
+        <div>
+            <div class="flight-eyebrow">✦ &nbsp; Your next adventure</div>
+            <h1 class="flight-title">
+                Your journey to
+                <em>{{ destination_query.title() if destination_query else 'somewhere new' }}</em>
+            </h1>
+
+            <p class="flight-subtitle">
+                {% if destination_info %}
+                    Explore flights to
+                    <strong>{{ destination_query.title() }}, {{ destination_info.country }}</strong>.
+                    Travelers: {{ travelers }}.
+                {% else %}
+                    Choose your destination, date, and travelers to compare flights.
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="flight-currency">INTERNATIONAL FLIGHTS · USD</div>
+    </div>
+
+    <form class="flight-search-panel" action="{{ url_for('destinations') }}" method="GET">
+        <div class="flight-field">
+            <label for="destination">Destination</label>
+            <input id="destination" name="destination"
+                   value="{{ destination_query }}"
+                   list="destination-list"
+                   placeholder="e.g. London" required>
+
+            <datalist id="destination-list">
+                <option value="London">
+                <option value="Paris">
+                <option value="Tokyo">
+                <option value="Singapore">
+                <option value="Dubai">
+                <option value="Bangkok">
+                <option value="New York">
+                <option value="Switzerland">
+            </datalist>
+        </div>
+
+        <div class="flight-field">
+            <label for="travel_date">Travel date</label>
+
+            <div class="calendar-input-wrap">
+                <input id="travel_date" name="travel_date"
+                       type="date" min="{{ today }}"
+                       value="{{ travel_date }}" required>
+
+                <span class="calendar-icon" aria-hidden="true">▦</span>
+            </div>
+        </div>
+
+        <div class="flight-field">
+            <label for="travelers">Travelers</label>
+            <select id="travelers" name="travelers">
+                {% for count in range(1, 6) %}
+                    <option value="{{ count }}"
+                        {% if travelers|int == count %}selected{% endif %}>
+                        {{ count }} traveler{% if count > 1 %}s{% endif %}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button class="flight-search-button" type="submit">
+            SEARCH FLIGHTS &nbsp; →
+        </button>
+    </form>
+
+    {% if destination_info and travel_date %}
+        <div class="results-toolbar">
+            <div>
+                <h2>{{ travel_options|length }} flight options</h2>
+                <p>Compare airlines, journey times, baggage, and total fares.</p>
+            </div>
+            <span class="demo-label">SAMPLE FLIGHT DATA · NOT LIVE FARES</span>
+        </div>
+
+        <div class="flight-list">
+            {% for option in travel_options %}
+                <article class="flight-card">
+                    <div>
+                        <div class="airline-block">
+                            <div class="airline-mark">{{ option.airline_code }}</div>
+                            <div>
+                                <div class="airline-name">{{ option.airline }}</div>
+                                <div class="flight-number">{{ option.flight_number }}</div>
+                            </div>
+                        </div>
+                        <span class="fare-pill">{{ option.fare_type }}</span>
+                    </div>
+
+                    <div>
+                        <div class="flight-route">
+                            <div class="route-end">
+                                <div class="route-time">{{ option.departure }}</div>
+                                <div class="route-city">India · Departure</div>
+                            </div>
+
+                            <div class="route-middle">
+                                <div class="route-duration">{{ option.duration }}</div>
+                                <div class="route-line"></div>
+                                <div class="route-stops">{{ option.stops }}</div>
+                            </div>
+
+                            <div class="route-end">
+                                <div class="route-time">{{ option.arrival }}</div>
+                                <div class="route-city">{{ destination_query.title() }}</div>
+                            </div>
+                        </div>
+
+                        <div class="flight-meta">
+                            <span>♧ {{ option.baggage }}</span>
+                            <span>✓ Demo itinerary</span>
+                        </div>
+                    </div>
+
+                    <div class="flight-price-block">
+                        <div class="price-caption">PRICE PER TRAVELER</div>
+                        <div class="flight-price">${{ '{:,}'.format(option.price) }}</div>
+
+                        <div class="flight-total-caption">
+                            ${{ '{:,}'.format(option.price * (travelers|int)) }}
+                            total for {{ travelers }} traveler{% if travelers|int > 1 %}s{% endif %}
+                        </div>
+
+                        <form method="POST" action="{{ url_for('book') }}">
+                            <input type="hidden" name="destination" value="{{ destination_query }}">
+                            <input type="hidden" name="travel_date" value="{{ travel_date }}">
+                            <input type="hidden" name="travelers" value="{{ travelers }}">
+                            <input type="hidden" name="option_id" value="{{ option.id }}">
+
+                            <button class="select-flight-button" type="submit">
+                                SELECT FLIGHT &nbsp; →
+                            </button>
+                        </form>
+
+                        <div class="flight-description">{{ option.description }}</div>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+
+        <p class="flight-note">
+            Sample airline schedules and fares are for demonstration only, not live airline inventory.
+        </p>
+
+    {% elif destination_query %}
+        <div class="empty-flights">
+            <h2>No demo flights found for “{{ destination_query }}”</h2>
+            <p>Try London, Paris, Tokyo, Singapore, Dubai, Bangkok, New York, or Switzerland.</p>
+        </div>
+
+    {% else %}
+        <div class="empty-flights">
+            <h2>Ready to find your flight?</h2>
+            <p>
+                Choose your destination, select a date using the calendar,
+                choose the number of travelers, and click Search Flights.
+                Your available demo options will appear here.
+            </p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

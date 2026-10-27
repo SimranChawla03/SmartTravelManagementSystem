@@ -1,0 +1,27 @@
+Issue Type,Key,Summary,Description,Status,Priority,Epic Link,Resolution
+Epic,STMS-E1,Project Foundation and Database Architecture,Establish core Flask backend structure and MongoDB Atlas cluster connectivity,Done,High,,Done
+Epic,STMS-E2,Module 1: User Registration and Identity Management,Implement secure user onboarding authentication and access control,Done,High,,Done
+Epic,STMS-E3,Module 2: Destination Discovery and Flight Comparison,Build search engine airline schedule comparison and validation filters,Done,High,,Done
+Epic,STMS-E4,Flight Reservation and E-Ticket Issuance,Implement booking transaction pipeline digital e-tickets and history,Done,High,,Done
+Epic,STMS-E5,Quality Assurance and Defect Tracking,Develop automated test suites execute verification and document defects,Done,High,,Done
+Epic,STMS-E6,DevOps Version Control and Cloud Deployment,Publish repository to GitHub and deploy WSGI application to Render,In Progress,High,,
+Story,STMS-1,MongoDB Atlas Integration and Schema Indexes,Connect to MongoDB Atlas cluster and enforce unique constraints on users and bookings,Done,High,STMS-E1,Done
+Story,STMS-2,User Registration and Form Validation,Build registration view with boundary validation for name password and email regex,Done,High,STMS-E2,Done
+Story,STMS-3,User Authentication and Session Management,Implement secure login with scrypt password hashing and HTTPOnly session cookies,Done,High,STMS-E2,Done
+Story,STMS-4,Protected Route Access Control Decorator,Develop login_required decorator to redirect unauthenticated requests,Done,High,STMS-E2,Done
+Story,STMS-5,Destination Search Engine and Query Normalization,Implement case-insensitive whitespace-trimmed destination search with country aliases,Done,High,STMS-E3,Done
+Story,STMS-6,Multi-Airline Schedule Comparison,Render detailed flight cards comparing British Airways Air India Emirates and IndiGo,Done,High,STMS-E3,Done
+Story,STMS-7,Travel Date and Traveler Count Validation,Implement BVA filters rejecting past dates and restricting party count to 1-5,Done,Medium,STMS-E3,Done
+Story,STMS-8,Flight Booking Transaction Pipeline,Generate booking record with unique ST-XXXXXXXX reference and computed total,Done,High,STMS-E4,Done
+Story,STMS-9,Digital E-Ticket Generation and User Isolation,Render digital boarding pass and enforce user isolation on booking records,Done,High,STMS-E4,Done
+Story,STMS-10,Automated Test Suite with Pytest,Develop unit and integration tests covering EP BVA security and database failures,Done,High,STMS-E5,Done
+Task,STMS-11,Git Repository Initialization and Secrets Sanitization,Configure comprehensive gitignore audit repository history and stage source code,In Progress,High,STMS-E6,
+Task,STMS-12,Production WSGI Configuration and Cloud Deployment,Configure Gunicorn server and deploy application to Render cloud hosting,In Progress,High,STMS-E6,
+Bug,STMS-BUG-1,Fix directory casing mismatch for templates and static folders,Normalize folder names to lowercase to prevent TemplateNotFound errors on Linux,Done,Highest,STMS-E6,Fixed
+Bug,STMS-BUG-2,Add global flash message container to base.html,Embed flash-container in base template so redirected notices are not dropped,Done,High,STMS-E2,Fixed
+Bug,STMS-BUG-3,Fix premature session.clear() in login route,Extract login_next_url before clearing session so return redirects function,Done,Medium,STMS-E2,Fixed
+Bug,STMS-BUG-4,Resilient MongoDB connection handling at application startup,Catch ConfigurationError and PyMongoError so app boots reliably in all environments,Done,High,STMS-E1,Fixed
+Bug,STMS-BUG-5,Catch PyMongoError in routes to prevent raw HTTP 500 errors,Wrap database calls in try-except blocks and display user-friendly flash notices,Done,High,STMS-E1,Fixed
+Bug,STMS-BUG-6,Support country name matching in destination search,Add country alias mapping resolving France UK USA UAE to flight destinations,Done,Medium,STMS-E3,Fixed
+Bug,STMS-BUG-7,Display unmatched search notice when travel date is omitted,Ensure No demo flights found appears when searching unknown destination without date,Done,Low,STMS-E3,Fixed
+Bug,STMS-BUG-8,Display flight schedules when navigating from homepage cards,Default travel date to current date when destination is requested without date,Done,Medium,STMS-E3,Fixed

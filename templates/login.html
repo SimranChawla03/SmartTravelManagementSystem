@@ -1,0 +1,108 @@
+
+{% extends "base.html" %}
+
+{% block title %}Sign In | SmartTravel{% endblock %}
+
+{% block content %}
+<section class="auth-page">
+
+    <div class="auth-image login-image">
+        <div class="auth-image-overlay"></div>
+
+        <div class="auth-image-content">
+            <p class="eyebrow">
+                <span></span> YOUR JOURNEY CONTINUES
+            </p>
+
+            <h1>
+                Somewhere<br>
+                amazing is<br>
+                <em>calling you.</em>
+            </h1>
+
+            <p>
+                Sign in and pick up where your next adventure begins.
+            </p>
+        </div>
+
+        <span class="auth-image-label">
+            THE WORLD IS YOURS TO WANDER
+        </span>
+    </div>
+
+    <div class="auth-form-panel">
+        <div class="auth-form">
+
+            <p class="auth-kicker">WELCOME BACK</p>
+
+            <h2>
+                Your next<br>
+                <em>adventure awaits.</em>
+            </h2>
+
+            <p class="auth-description">
+                Sign in to discover destinations and manage your journeys.
+            </p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form
+                action="{{ url_for('login') }}"
+                method="POST"
+                id="login-form"
+            >
+                <label for="email">Email address</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="you@example.com"
+                    maxlength="254"
+                    autocomplete="username"
+                    required
+                >
+
+                <label for="password">Password</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required
+                >
+
+                <button
+                    type="submit"
+                    class="auth-submit"
+                    id="login-submit"
+                >
+                    <span class="login-button-text">SIGN IN TO YOUR ACCOUNT</span>
+                    <span class="login-button-arrow" aria-hidden="true">→</span>
+                </button>
+            </form>
+
+            <p class="auth-switch">
+                New to SmartTravel?
+                <a href="{{ url_for('register') }}">Create an account</a>
+            </p>
+
+            <a href="{{ url_for('home') }}" class="back-home">
+                ← Back to homepage
+            </a>
+
+        </div>
+    </div>
+
+</section>
+{% endblock %}

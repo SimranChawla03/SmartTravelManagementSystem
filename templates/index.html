@@ -1,0 +1,170 @@
+
+{% extends "base.html" %}
+
+{% block title %}SmartTravel | The World Is Yours to Wander{% endblock %}
+
+{% block content %}
+<main>
+    <section class="hero">
+        <div class="hero-shade"></div>
+
+        <div class="coordinates">
+            <span class="coordinate-dot">◎</span>
+            <div>64°08′ N<br>21°56′ W<br><small>ICELAND</small></div>
+        </div>
+
+        <div class="hero-copy">
+            <p class="eyebrow"><span></span> JOURNEYS BEYOND BORDERS</p>
+
+            {% if session.get('user_id') %}
+                <p class="eyebrow">WELCOME BACK, {{ session.get('user_name', 'TRAVELER') | upper }}</p>
+            {% endif %}
+
+            <h1>THE WORLD<br>IS YOURS<br>TO <em>WANDER.</em></h1>
+
+            <p class="hero-subtitle">
+                Curated journeys. Unforgettable places.
+            </p>
+
+            <a href="#destinations" class="explore-button">
+                EXPLORE THE WORLD <span>→</span>
+            </a>
+        </div>
+
+        <div class="hero-bottom">
+            <span>01 — 03</span>
+            <span class="scroll-line"></span>
+            <span>SCROLL TO DISCOVER ↓</span>
+        </div>
+    </section>
+
+    <section class="search-wrap" id="search">
+        <form class="trip-search" action="{{ url_for('destinations') }}" method="GET">
+            <label class="search-field">
+                <span class="search-icon">⌖</span>
+                <span class="field-copy">
+                    <strong>Where to?</strong>
+                    <input
+                        type="text"
+                        name="destination"
+                        placeholder="Search destinations, countries..."
+                        required
+                    >
+                </span>
+            </label>
+
+            <label class="search-field">
+                <span class="search-icon">▦</span>
+                <span class="field-copy">
+                    <strong>When are you going?</strong>
+                    <input
+                        type="date"
+                        name="travel_date"
+                        aria-label="Travel date"
+                        min="{{ now_date if now_date is defined else '' }}"
+                    >
+                </span>
+            </label>
+
+            <label class="search-field travelers-field">
+                <span class="search-icon">♧</span>
+                <span class="field-copy">
+                    <strong>Travelers</strong>
+                    <select name="travelers" aria-label="Number of travelers">
+                        <option value="1">1 traveler</option>
+                        <option value="2" selected>2 travelers</option>
+                        <option value="3">3 travelers</option>
+                        <option value="4">4 travelers</option>
+                        <option value="5">5 travelers</option>
+                    </select>
+                </span>
+            </label>
+
+            <button class="search-button" type="submit" aria-label="Search destinations">⌕</button>
+        </form>
+    </section>
+
+    <section class="destinations-section" id="destinations">
+        <div class="destination-intro">
+            <p class="eyebrow"><span></span> FEATURED DESTINATIONS</p>
+
+            <h2>Find your next<br><em>somewhere.</em></h2>
+
+            <p class="intro-copy">
+                From iconic cities to unforgettable escapes,
+                discover extraordinary destinations for every kind of traveler.
+            </p>
+
+            <a href="{{ url_for('destinations') }}" class="text-link">
+                VIEW ALL DESTINATIONS <span>→</span>
+            </a>
+        </div>
+
+        <article class="destination-card patagonia">
+            <div class="card-overlay"></div>
+            <div class="card-content">
+                <p class="card-country">UNITED KINGDOM</p>
+                <h3>London</h3>
+                <p>Iconic landmarks<br>and vibrant city life.</p>
+                <a
+                    href="{{ url_for('destinations', destination='London') }}"
+                    class="card-arrow"
+                    aria-label="Explore London"
+                >↗</a>
+            </div>
+        </article>
+
+        <article class="destination-card kyoto">
+            <div class="card-overlay"></div>
+            <div class="card-content">
+                <p class="card-country">FRANCE</p>
+                <h3>Paris</h3>
+                <p>Romantic streets<br>and timeless elegance.</p>
+                <a
+                    href="{{ url_for('destinations', destination='Paris') }}"
+                    class="card-arrow"
+                    aria-label="Explore Paris"
+                >↗</a>
+            </div>
+        </article>
+
+        <article class="destination-card amalfi">
+            <div class="card-overlay"></div>
+            <div class="card-content">
+                <p class="card-country">JAPAN</p>
+                <h3>Tokyo</h3>
+                <p>Modern wonders<br>and rich traditions.</p>
+                <a
+                    href="{{ url_for('destinations', destination='Tokyo') }}"
+                    class="card-arrow"
+                    aria-label="Explore Tokyo"
+                >↗</a>
+            </div>
+        </article>
+    </section>
+
+    <section class="journey-section" id="about">
+        <div>
+            <p class="eyebrow"><span></span> ABOUT SMARTTRAVEL</p>
+            <h2>Less planning.<br><em>More living.</em></h2>
+        </div>
+
+        <p>
+            SmartTravel helps you discover destinations, compare available
+            travel options, plan your trip, and confirm bookings in one place.
+            Create an account to manage your reservations and revisit your
+            travel plans whenever you need them.
+        </p>
+
+        {% if session.get('user_id') %}
+            <a href="{{ url_for('my_bookings') }}" class="explore-button">
+                VIEW MY BOOKINGS <span>→</span>
+            </a>
+        {% else %}
+            <a href="{{ url_for('register') }}" class="explore-button">
+                START YOUR JOURNEY <span>→</span>
+            </a>
+        {% endif %}
+    </section>
+</main>
+{% endblock %}

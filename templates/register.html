@@ -1,0 +1,117 @@
+
+{% extends "base.html" %}
+
+{% block title %}Create Account | SmartTravel{% endblock %}
+
+{% block content %}
+<section class="auth-page">
+
+    <div class="auth-image">
+        <div class="auth-image-overlay"></div>
+
+        <div class="auth-image-content">
+            <p class="eyebrow">
+                <span></span> YOUR NEXT CHAPTER STARTS HERE
+            </p>
+
+            <h1>
+                The world is<br>
+                waiting for <em>you.</em>
+            </h1>
+
+            <p>
+                Create your account and start collecting unforgettable journeys.
+            </p>
+        </div>
+
+        <span class="auth-image-label">
+            DISCOVER MORE. WANDER FURTHER.
+        </span>
+    </div>
+
+    <div class="auth-form-panel">
+        <div class="auth-form">
+
+            <p class="auth-kicker">WELCOME TO SMARTTRAVEL</p>
+
+            <h2>Create your <em>account.</em></h2>
+
+            <p class="auth-description">
+                Your next adventure is closer than you think.
+            </p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form action="{{ url_for('register') }}" method="POST">
+
+                <label for="name">Full name</label>
+
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Enter your full name"
+                    minlength="2"
+                    maxlength="80"
+                    autocomplete="name"
+                    required
+                >
+
+                <label for="email">Email address</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="you@example.com"
+                    maxlength="254"
+                    autocomplete="email"
+                    required
+                >
+
+                <label for="password">Create password</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="At least 8 characters"
+                    minlength="8"
+                    maxlength="128"
+                    autocomplete="new-password"
+                    required
+                >
+
+                <p class="form-hint">
+                    Use at least 8 characters for your password.
+                </p>
+
+                <button type="submit" class="auth-submit">
+                    <span class="register-button-text">CREATE MY ACCOUNT</span>
+                    <span class="register-button-arrow" aria-hidden="true">→</span>
+                </button>
+
+            </form>
+
+            <p class="auth-switch">
+                Already have an account?
+                <a href="{{ url_for('login') }}">Sign in</a>
+            </p>
+
+            <a href="{{ url_for('home') }}" class="back-home">
+                ← Back to homepage
+            </a>
+
+        </div>
+    </div>
+
+</section>
+{% endblock %}
